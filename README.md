@@ -29,7 +29,7 @@ This is especially important for _graceful termination_ of the server. If the sh
 
 ## Using scratch vs alpine
 
-The issue with `scratch` is the lack of debugging capability.
+The issue with `scratch` is the lack of debugging capability (same for `distrolless`, see below).
 
 > FROM scratch literally is an empty, zero-byte image / filesystem, where you add everything yourself [^2].
 
@@ -53,8 +53,10 @@ FROM alpine:latest
 RUN apk add bash
 ```
 
+
 ## Distroless
 
+`Distroless` images contains only your application and its runtime dependencies. They do no contain package manager, shells or any other programs you would expect to find in standard Linux distribution. [^3]
 
 
 ## Build
@@ -67,7 +69,23 @@ Note that we don't have to specify `GOOS` or `GOARCH` because go will detect it 
 + RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/app
 ```
 
+## Docker stop vs kill
+
+For graceful shutdown, use `docker stop` instead of `docker kill`. This can be observed by the messages logged by the application (`server exiting`).
+
+```bash
+$ docker ps # get the id of the running container
+$ docker stop <container> # kill it (gracefully)
+$ docker kill <container> # does not stop the process gracefully
+```
+
+## Entrypoint vs cmd
+
+See here [^4].
+
+## References
 
 [^1]: https://engineering.pipefy.com/2021/07/30/1-docker-bits-shell-vs-exec/#:~:text=The%20SHELL%20form%20runs%20the,process%20(on%20a%20shell).&text=The%20EXEC%20form%20runs%20the,one%20that%20has%20PID%201).
 [^2]: https://github.com/moby/moby/issues/17896
 [^3]: https://github.com/GoogleContainerTools/distroless
+[^4]: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#entrypoint

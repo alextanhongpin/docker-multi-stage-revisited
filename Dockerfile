@@ -43,4 +43,4 @@ COPY --from=builder /go/bin/app /go/bin/app
 
 USER appuser:appuser
 
-CMD ["/go/bin/app"]
+ENTRYPOINT ["/go/bin/app"]
