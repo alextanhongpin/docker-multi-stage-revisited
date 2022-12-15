@@ -27,12 +27,7 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/app
 
-FROM alpine:latest
-# The issue with scratch is it doesn't have debugging capability.
-#FROM scratch
-
-# Allow `$ docker exec -it (pid) bash` instead of `$ docker exec -it (pid) /bin/sh`
-RUN apk add bash
+FROM gcr.io/distroless/static-debian11
 
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
