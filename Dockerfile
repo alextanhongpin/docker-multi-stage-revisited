@@ -1,4 +1,4 @@
-FROM golang:1.19.4-alpine3.17 AS builder
+FROM golang:1.22.1-alpine3.19 AS builder
 
 # Add timezone information.
 RUN apk update && apk add --no-cache git ca-certificates tzdata && update-ca-certificates
@@ -25,7 +25,10 @@ RUN go mod verify
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/app
+# https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching
+ENV GOCACHE=/root/.cache/go-build \
+		GODEBUG=gocachetest=1
+RUN --mount=type=cache,target="/root/.cache/go-build" CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/app
 
 FROM alpine:latest
 # The issue with scratch is it doesn't have debugging capability.

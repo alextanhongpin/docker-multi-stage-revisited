@@ -3,7 +3,7 @@ run:
 
 
 build:
-	@docker build -t alextanhongpin/app:latest -t alextanhongpin/app:$(shell cat VERSION) .
+	@DOCKER_BUILDKIT=1 docker build --progress=plain -t alextanhongpin/app:latest -t alextanhongpin/app:$(shell cat VERSION) .
 
 
 build-distroless:
