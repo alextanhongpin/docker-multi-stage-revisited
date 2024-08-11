@@ -30,7 +30,7 @@ ENV GOCACHE=/root/.cache/go-build \
 		GODEBUG=gocachetest=1
 RUN --mount=type=cache,target="/root/.cache/go-build" CGO_ENABLED=0 go build -ldflags="-w -s" -o /go/bin/app
 
-FROM alpine:latest
+FROM alpine:3.20.2
 # The issue with scratch is it doesn't have debugging capability.
 #FROM scratch
 

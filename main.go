@@ -24,7 +24,8 @@ func main() {
 		case <-ctx.Done():
 			fmt.Println("http graceful shutdown")
 			w.WriteHeader(http.StatusOK)
-		case <-time.After(2 * time.Second):
+		default:
+			//case <-time.After(2 * time.Second):
 			fmt.Fprint(w, "hello world")
 		}
 	})

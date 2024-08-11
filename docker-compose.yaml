@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    image: alextanhongpin/app:$VERSION
+    ports:
+    - 127.0.0.1:8080:8080
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 50M # Use docker stats to see the limit
